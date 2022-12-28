@@ -1,21 +1,18 @@
 package com.unipi.msc.jobfinderapi.Security;
 
-import com.unipi.msc.HouseFindingBack.Model.User.UserService;
-import com.unipi.msc.HouseFindingBack.Model.UserDao;
+import com.unipi.msc.jobfinderapi.Model.User.UserService;
+import com.unipi.msc.jobfinderapi.Model.UserDao;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,12 +22,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Collection;
+
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
     private final JwtAthFilter jwtAthFilter;
     private final UserDao userDao;
-    private final UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -65,18 +63,13 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         //TODO: Implement Encoding
-//        return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
+        //        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return new
-            }
-        }
+        return userDao::findUserByEmail;
     }
 
 }

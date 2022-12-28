@@ -1,21 +1,19 @@
 package com.unipi.msc.jobfinderapi.Controller.Auth;
 
-import com.unipi.msc.HouseFindingBack.Controller.Auth.Requests.AuthenticationLoginRequest;
-import com.unipi.msc.HouseFindingBack.Controller.Auth.Requests.AuthenticationSignUpRequest;
-import com.unipi.msc.HouseFindingBack.Model.User.User;
-import com.unipi.msc.HouseFindingBack.Model.User.UserService;
-import com.unipi.msc.HouseFindingBack.Security.jwtUtils;
-import com.unipi.msc.HouseFindingBack.Model.UserDao;
+import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.AuthenticationLoginRequest;
+import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.AuthenticationSignUpRequest;
+import com.unipi.msc.jobfinderapi.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.UserService;
+import com.unipi.msc.jobfinderapi.Model.UserDao;
+import com.unipi.msc.jobfinderapi.Security.jwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

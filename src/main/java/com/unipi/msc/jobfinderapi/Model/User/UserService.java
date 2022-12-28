@@ -1,10 +1,8 @@
 package com.unipi.msc.jobfinderapi.Model.User;
 
-import com.unipi.msc.HouseFindingBack.Model.Student.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

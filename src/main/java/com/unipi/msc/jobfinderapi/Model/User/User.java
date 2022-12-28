@@ -1,19 +1,13 @@
 package com.unipi.msc.jobfinderapi.Model.User;
 
-import com.unipi.msc.HouseFindingBack.Model.UserDao;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class User{
     @Id
     @GeneratedValue
@@ -35,6 +29,6 @@ public class User{
 
     @Enumerated(EnumType.STRING) @Getter @Setter private Authority authority;
 
-    @OneToMany
-    @Getter @Setter private List<UserDao> userDaoList;
+//    @OneToMany
+//    @Getter @Setter private List<UserDao> userDaoList;
 }

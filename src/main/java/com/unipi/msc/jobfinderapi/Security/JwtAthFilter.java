@@ -1,24 +1,22 @@
 package com.unipi.msc.jobfinderapi.Security;
 
-import com.unipi.msc.HouseFindingBack.Model.User.User;
-import com.unipi.msc.HouseFindingBack.Model.User.UserRepository;
-import com.unipi.msc.HouseFindingBack.Model.User.UserService;
-import com.unipi.msc.HouseFindingBack.Model.UserDao;
+import com.unipi.msc.jobfinderapi.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.UserService;
+import com.unipi.msc.jobfinderapi.Model.UserDao;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component

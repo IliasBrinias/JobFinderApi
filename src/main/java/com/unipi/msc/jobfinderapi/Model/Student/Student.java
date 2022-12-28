@@ -1,8 +1,8 @@
 package com.unipi.msc.jobfinderapi.Model.Student;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 
 @Entity
 @Table
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class Student {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
 
     private Long id;
     @NonNull

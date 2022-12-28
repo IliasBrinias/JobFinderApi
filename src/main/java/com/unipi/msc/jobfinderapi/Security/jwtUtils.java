@@ -1,6 +1,6 @@
 package com.unipi.msc.jobfinderapi.Security;
 
-import com.unipi.msc.HouseFindingBack.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

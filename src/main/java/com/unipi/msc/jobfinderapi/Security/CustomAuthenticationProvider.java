@@ -1,7 +1,8 @@
 package com.unipi.msc.jobfinderapi.Security;
 
-import com.unipi.msc.HouseFindingBack.Model.User.User;
-import com.unipi.msc.HouseFindingBack.Model.User.UserService;
+import com.unipi.msc.jobfinderapi.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.UserService;
+import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,9 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.Resource;
+import java.util.ArrayList;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -38,7 +37,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // get user details using Spring security user details service
         User user = null;
         try {
-            user = userService.getUserByUsername(username);
+//            user = userService.getUserByUsername(username);
 
         } catch (UsernameNotFoundException exception) {
             throw new BadCredentialsException("invalid login details");
