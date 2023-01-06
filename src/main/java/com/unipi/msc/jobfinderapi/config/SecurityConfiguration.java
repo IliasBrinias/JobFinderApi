@@ -1,5 +1,6 @@
 package com.unipi.msc.jobfinderapi.config;
 
+import com.unipi.msc.jobfinderapi.Model.User.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +23,10 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
-                .permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/client/**").hasRole(Role.CLIENT.name())
+                .requestMatchers("/dev/**").hasRole(Role.DEVELOPER.name())
+                .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -32,7 +35,6 @@ public class SecurityConfiguration {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
 }
