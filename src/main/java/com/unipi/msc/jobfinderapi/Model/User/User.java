@@ -2,33 +2,84 @@ package com.unipi.msc.jobfinderapi.Model.User;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.Hibernate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 
-@Entity
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
-//@RequiredArgsConstructor
-public class User{
+@Builder
+@Entity
+@Table
+//@MappedSuperclass
+public class User implements UserDetails {
     @Id
     @GeneratedValue
-    @Getter @Setter private Long Id;
+    private Long Id;
 
     @Column(unique = true)
-    @Getter @Setter private String username;
-
-    @Getter private String password;
+    private String email;
 
     @Column(unique = true)
-    @Getter private String email;
+    private String username;
 
-    @Getter @Setter private String firstName;
+    private String password;
 
-    @Getter @Setter private String lastName;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Getter @Setter private Long birthday;
+    private String firstName;
 
-    @Enumerated(EnumType.STRING) @Getter @Setter private Authority authority;
+    private String lastName;
 
-//    @OneToMany
-//    @Getter @Setter private List<UserDao> userDaoList;
+    private Long birthday;
+
+    private Boolean isVerified;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return Id != null && Objects.equals(Id, user.Id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
