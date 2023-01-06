@@ -14,10 +14,9 @@
 	<name>JobFinderApi</name>
 	<description>JobFinderApi</description>
 	<properties>
-		<java.version>19</java.version>
+		<java.version>19.0.1</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-
 	</properties>
 	<dependencies>
 		<dependency>
@@ -78,8 +77,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-
-
 				<configuration>
 					<excludes>
 						<exclude>
@@ -87,6 +84,14 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>10</source>
+					<target>10</target>
 				</configuration>
 			</plugin>
 		</plugins>
