@@ -15,8 +15,6 @@
 	<description>JobFinderApi</description>
 	<properties>
 		<java.version>19.0.1</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
