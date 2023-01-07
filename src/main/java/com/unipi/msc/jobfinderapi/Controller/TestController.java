@@ -1,5 +1,6 @@
 package com.unipi.msc.jobfinderapi.Controller;
 
+import com.unipi.msc.jobfinderapi.Model.User.Admin;
 import com.unipi.msc.jobfinderapi.Model.User.User;
 import com.unipi.msc.jobfinderapi.Model.User.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,10 @@ public class TestController {
     private final UserService userService;
     @GetMapping
     public ResponseEntity<String> home(){
-        User loggedInUserEmail = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (u instanceof Admin){
+            Admin a = (Admin) u;
+        }
         return ResponseEntity.ok("hello");
     }
 }

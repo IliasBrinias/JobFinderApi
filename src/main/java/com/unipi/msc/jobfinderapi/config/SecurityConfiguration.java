@@ -1,6 +1,6 @@
 package com.unipi.msc.jobfinderapi.config;
 
-import com.unipi.msc.jobfinderapi.Model.User.Role;
+import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
