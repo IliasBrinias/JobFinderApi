@@ -1,7 +1,7 @@
 package com.unipi.msc.jobfinderapi.Controller.Auth.Responses;
 
 import com.unipi.msc.jobfinderapi.Model.Link.Link;
-import com.unipi.msc.jobfinderapi.Model.Skills.Skills;
+import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import lombok.AllArgsConstructor;
@@ -32,5 +32,5 @@ public class AuthenticationResponse {
     private List<Link> link;
 
     //Dev
-    private List<Skills> skills;
+    private List<Skill> skills;
 }

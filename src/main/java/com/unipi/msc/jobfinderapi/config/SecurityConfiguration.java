@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/client/**").hasRole(Role.CLIENT.name())
                 .requestMatchers("/dev/**").hasRole(Role.DEVELOPER.name())
-                .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+                .requestMatchers("/client/**","/dev/**","/admin/**").hasRole(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

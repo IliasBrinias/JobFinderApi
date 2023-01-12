@@ -1,10 +1,8 @@
 package com.unipi.msc.jobfinderapi.Model.Skills;
 
-import com.unipi.msc.jobfinderapi.Model.User.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @Entity
@@ -13,7 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class Skills {
+public class Skill {
     @Id
     @GeneratedValue
     private Long Id;

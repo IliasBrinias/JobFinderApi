@@ -1,41 +1,28 @@
-package com.unipi.msc.jobfinderapi.Model.Job;
+package com.unipi.msc.jobfinderapi.Controller.JobController.Responses;
 
-import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
-import com.unipi.msc.jobfinderapi.Model.User.User;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
-public class Job {
-    @Id
-    @GeneratedValue
+public class JobPresenter {
     private Long Id;
     private String title;
-    @ManyToOne
-    private User user;
-    @Enumerated
-    private Visibility jobVisibility;
+    private String username;
     private double price;
-    @Enumerated
-    private Visibility priceVisibility;
-    @OneToOne
     private JobCategory category;
-    @OneToOne
     private PaymentType paymentType;
     private double maxPrice;
-    @OneToOne
     private JobDuration duration;
-    @OneToMany
     private List<Skill> skills;
 }
