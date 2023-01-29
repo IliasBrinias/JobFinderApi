@@ -1,8 +1,8 @@
 package com.unipi.msc.jobfinderapi.Model.Skills;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.unipi.msc.jobfinderapi.Model.Job.Job;
+import com.unipi.msc.jobfinderapi.Model.User.Developer;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -16,5 +16,9 @@ public class Skill {
     @GeneratedValue
     private Long Id;
     private String skill;
-    private String hint;
+    private String alias;
+    @ManyToOne
+    private Developer developer;
+    @ManyToOne
+    private Job job;
 }

@@ -1,11 +1,13 @@
 package com.unipi.msc.jobfinderapi.Model.Job;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
+import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
-import com.unipi.msc.jobfinderapi.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,20 +24,20 @@ public class Job {
     @GeneratedValue
     private Long Id;
     private String title;
-    @ManyToOne
-    private User user;
+    private double price;
+    private double maxPrice;
     @Enumerated
     private Visibility jobVisibility;
-    private double price;
     @Enumerated
     private Visibility priceVisibility;
-    @OneToOne
-    private JobCategory category;
-    @OneToOne
+    @ManyToOne
+    private Client client;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private JobSubCategory jobSubCategory;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private PaymentType paymentType;
-    private double maxPrice;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private JobDuration duration;
-    @OneToMany
-    private List<Skill> skills;
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Skill> skills = new java.util.ArrayList<>();
 }

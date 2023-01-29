@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 
 public class JobDuration {
-    @jakarta.persistence.Id
+    @Id
     @GeneratedValue
     private Long Id;
     private String duration;

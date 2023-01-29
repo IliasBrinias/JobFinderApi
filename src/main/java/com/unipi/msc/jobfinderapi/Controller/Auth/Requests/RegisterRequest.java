@@ -24,7 +24,6 @@ public class RegisterRequest {
     private String lastName;
     private Long birthday;
     private String dsc;
-    private List<Link> link;
     @NonNull
     @Enumerated(EnumType.STRING)
     private Role role;

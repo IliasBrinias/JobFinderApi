@@ -9,4 +9,7 @@ import java.util.Optional;
 @Repository
 public interface SkillRepository extends JpaRepository<Skill,Long> {
     Optional<List<Skill>> findByIdIn(List<Long> idList);
+    Optional<Skill> findById(Long id);
+    List<Skill> findAll();
+    Integer deleteSkillById(Long id);
 }

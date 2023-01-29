@@ -1,24 +1,22 @@
 package com.unipi.msc.jobfinderapi.Controller.JobController;
 
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
-import com.unipi.msc.jobfinderapi.Controller.JobController.Request.AddJobRequest;
+import com.unipi.msc.jobfinderapi.Controller.JobController.Request.JobRequest;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.JobPresenter;
 import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.Job;
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryService;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDurationService;
 import com.unipi.msc.jobfinderapi.Model.Job.JobRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.JobService;
+import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory;
+import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategoryService;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentTypeService;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
-import com.unipi.msc.jobfinderapi.Model.User.Developer;
-import com.unipi.msc.jobfinderapi.Model.User.User;
+import com.unipi.msc.jobfinderapi.Model.User.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,9 +31,8 @@ import java.util.Locale;
 public class JobController {
     private final JobDurationService jobDurationService;
     private final JobRepository jobRepository;
-    private final JobCategoryRepository jobCategoryRepository;
+    private final JobSubCategoryService jobSubCategoryService;
     private final JobService jobService;
-    private final JobCategoryService jobCategoryService;
     private final SkillService skillService;
     private final PaymentTypeService paymentTypeService;
     @GetMapping
@@ -48,13 +44,13 @@ public class JobController {
                     JobPresenter.builder()
                             .Id(j.getId())
                             .title(j.getTitle())
-                            .username(j.getUser().getUsername())
+//                            .username(j.getClient().getUsername())
                             .price(j.getPrice())
-                            .category(j.getCategory())
-                            .paymentType(j.getPaymentType())
+//                            .jobSubCategory(j.getJobSubCategory())
+//                            .paymentType(j.getPaymentType())
                             .maxPrice(j.getMaxPrice())
-                            .duration(j.getDuration())
-                            .skills(j.getSkills())
+//                            .duration(j.getDuration())
+//                            .skills(j.getSkills())
                             .build()
             );
         }
@@ -67,62 +63,61 @@ public class JobController {
         JobPresenter jobPresenter = JobPresenter.builder()
                 .Id(j.getId())
                 .title(j.getTitle())
-                .username(j.getUser().getUsername())
+//                .username(j.getClient().getUsername())
                 .price(j.getPrice())
-                .category(j.getCategory())
-                .paymentType(j.getPaymentType())
+//                .jobSubCategory(j.getJobSubCategory())
+//                .paymentType(j.getPaymentType())
                 .maxPrice(j.getMaxPrice())
-                .duration(j.getDuration())
-                .skills(j.getSkills())
+//                .duration(j.getDuration())
+//                .skills(j.getSkills())
                 .build();
         return ResponseEntity.ok(jobPresenter);
     }
-
-    @PostMapping()
-    public ResponseEntity<?> getJobs(@RequestBody AddJobRequest request) {
-        Developer developer;
+    @PostMapping
+    public ResponseEntity<?> getJobs(@RequestBody JobRequest request) {
+        Client client;
         try {
-            developer = (Developer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (ClassCastException ignore){
-            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.MUST_BE_DEV));
+            return ResponseEntity.status(403).body(new ErrorResponse(false,ErrorMessages.NotAuthorized));
         }
         JobDuration jobDuration = null;
-        JobCategory jobCategory = null;
+        JobSubCategory jobSubCategory = null;
         PaymentType paymentType = null;
         List<Skill> skills = new ArrayList<>();
         if (request.getDurationId() != null) {
             jobDuration = jobDurationService.getDurationById(request.getDurationId()).orElse(null);
         }
-        if (request.getCategoryId() != null) {
-            jobCategory = jobCategoryService.getCategoryById(request.getCategoryId()).orElse(null);
+        if (request.getSubCategoryId() != null) {
+            jobSubCategory = jobSubCategoryService.getSubCategoryById(request.getSubCategoryId()).orElse(null);
         }
         if (request.getSkillList() != null) {
             skills = skillService.getSkillsByIdIn(request.getSkillList()).orElse(new ArrayList<>());
         }
         if (request.getPaymentTypeId() != null) {
-            paymentType = paymentTypeService.getDurationById(request.getPaymentTypeId()).orElse(null);
+            paymentType = paymentTypeService.getPaymentTypeById(request.getPaymentTypeId()).orElse(null);
         }
         Job job = Job.builder()
                 .title(request.getTitle())
-                .user(developer)
+//                .client(client)
                 .jobVisibility(Visibility.valueOf(request.getJobVisibility().toString()))
                 .price(request.getPrice())
                 .priceVisibility(Visibility.valueOf(request.getPriceVisibility().toString()))
-                .category(jobCategory)
-                .paymentType(paymentType)
+//                .jobSubCategory(jobSubCategory)
+//                .paymentType(paymentType)
                 .maxPrice(request.getMaxPrice())
-                .duration(jobDuration)
-                .skills(skills)
+//                .duration(jobDuration)
+//                .skills(skills)
                 .build();
         jobRepository.save(job);
         return ResponseEntity.ok().body(job);
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editJob(@PathVariable Long id, @RequestBody  AddJobRequest request) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> editJob(@PathVariable Long id, @RequestBody JobRequest request) {
         JobDuration jobDuration = jobDurationService.getDurationById(request.getDurationId()).orElse(null);
         List<Skill> skills = skillService.getSkillsByIdIn(request.getSkillList()).orElse(null);
-        PaymentType paymentType = paymentTypeService.getDurationById(request.getPaymentTypeId()).orElse(null);
+        PaymentType paymentType = paymentTypeService.getPaymentTypeById(request.getPaymentTypeId()).orElse(null);
+        JobSubCategory jobSubCategory = jobSubCategoryService.getSubCategoryById(request.getSubCategoryId()).orElse(null);
 
         Job job = jobService.getJobWithId(id).orElse(null);
         if (job == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.JOB_NOT_FOUND));
@@ -133,18 +128,31 @@ public class JobController {
         if (request.getJobVisibility()!=null){
             job.setJobVisibility(request.getJobVisibility());
         }
-        if (request.getPrice()!=0.0){
-            job.setPrice(request.getPrice());
-        }
         if (request.getPriceVisibility()!=null){
             job.setPriceVisibility(request.getPriceVisibility());
         }
-        if (request.getCategoryId()!=null){
-            JobCategory jobCategory = jobCategoryService.getCategoryById(request.getCategoryId()).orElse(null);
-            if (jobCategory == null) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.JOB_CATEGORY_NOT_FOUND));
-            job.setCategory(jobCategory);
+        if (request.getPrice()!=0.0){
+            job.setPrice(request.getPrice());
         }
-        // TODO: PUT is not completed
+        if (request.getMaxPrice()!=0.0){
+            job.setMaxPrice(request.getMaxPrice());
+        }
+        if (request.getSubCategoryId()!=null){
+            if (jobSubCategory == null) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.JOB_CATEGORY_NOT_FOUND));
+//            job.setJobSubCategory(jobSubCategory);
+        }
+        if (request.getPaymentTypeId() != null){
+            if (paymentType == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.PAYMENT_TYPE_NOT_FOUND));
+//            job.setPaymentType(paymentType);
+        }
+        if (request.getDurationId() != null){
+            if (jobDuration == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.JOB_DURATION_NOT_FOUND));
+//            job.setDuration(jobDuration);
+        }
+        if (!request.getSkillList().isEmpty()){
+            if (skills == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.SKILLS_NOT_FOUND));
+//            job.setSkills(skills);
+        }
         jobRepository.save(job);
         return ResponseEntity.ok().build();
     }
@@ -155,7 +163,4 @@ public class JobController {
         }
         return ResponseEntity.ok().build();
     }
-
-
-
 }

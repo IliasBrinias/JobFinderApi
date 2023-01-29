@@ -1,5 +1,6 @@
 package com.unipi.msc.jobfinderapi.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt, userEmail;
+        final String jwt;
+        String userEmail;
 
         // check if the header has Bearer token
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
@@ -34,7 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         // get the token from the Bearer and extract the username
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
+        try {
+            userEmail = jwtService.extractUsername(jwt);
+        }catch (ExpiredJwtException e){
+            userEmail = null;
+        }
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             // load the user and check if the token is valid
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

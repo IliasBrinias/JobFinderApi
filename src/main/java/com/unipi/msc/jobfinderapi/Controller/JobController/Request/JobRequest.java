@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddJobRequest {
+public class JobRequest {
     private String title;
     @Enumerated(EnumType.STRING)
     private Visibility jobVisibility;
@@ -19,7 +19,7 @@ public class AddJobRequest {
     private Visibility priceVisibility;
     private double price;
     private double maxPrice;
-    private Long categoryId;
+    private Long subCategoryId;
     private Long paymentTypeId;
     private Long durationId;
     private List<Long> skillList;

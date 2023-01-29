@@ -52,7 +52,7 @@ public class AuthenticationService {
                         request.getBirthday(),
                         false,
                         request.getDsc(),
-                        request.getLink()
+                        new ArrayList<>()
                         );
             }
             else if (request.getRole()==Role.DEVELOPER){
@@ -66,7 +66,7 @@ public class AuthenticationService {
                         request.getBirthday(),
                         false,
                         request.getDsc(),
-                        request.getLink(),
+                        new ArrayList<>(),
                         new ArrayList<>()
                 );
             }
@@ -113,13 +113,13 @@ public class AuthenticationService {
         if (user instanceof Client){
             Client c = (Client) user;
             response.setDsc(c.getDsc());
-            response.setLink(c.getLink());
+//            response.setLink(c.getLink());
         }
         if (user instanceof Developer){
             Developer d = (Developer) user;
             response.setDsc(d.getDsc());
-            response.setLink(d.getLink());
-            response.setSkills(d.getSkills());
+//            response.setLink(d.getLink());
+//            response.setSkills(d.getSkills());
         }
         return response;
     }

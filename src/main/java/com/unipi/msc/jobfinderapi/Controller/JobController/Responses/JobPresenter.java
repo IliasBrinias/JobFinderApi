@@ -1,7 +1,7 @@
 package com.unipi.msc.jobfinderapi.Controller.JobController.Responses;
 
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
+import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class JobPresenter {
     private String title;
     private String username;
     private double price;
-    private JobCategory category;
+    private JobSubCategory jobSubCategory;
     private PaymentType paymentType;
     private double maxPrice;
     private JobDuration duration;

@@ -1,7 +1,9 @@
 package com.unipi.msc.jobfinderapi.Model.User;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
+import com.unipi.msc.jobfinderapi.Model.Link.Link;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -9,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +53,6 @@ public class User implements UserDetails {
     private Long birthday;
     @Column
     private Boolean isVerified = false;
-
 
     public User(@NonNull String email, @NonNull String username, String password, @NonNull Role role, Gender gender, String firstName, String lastName, Long birthday, Boolean isVerified) {
         this.email = email;

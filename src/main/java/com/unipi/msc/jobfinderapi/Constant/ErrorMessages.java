@@ -10,4 +10,9 @@ public class ErrorMessages {
     public static final String JOB_NOT_FOUND = "Job not found";
     public static final String JOB_CATEGORY_NOT_FOUND = "Job Category not Found";
     public static final String MUST_BE_DEV = "User must be developer";
+    public static final String PAYMENT_TYPE_NOT_FOUND = "Payment Type not found";
+    public static final String JOB_DURATION_NOT_FOUND = "Job Duration not found";
+    public static final String SKILLS_NOT_FOUND = "Skills not found";
+    public static final String JOB_SUBCATEGORY_NOT_FOUND = "Subcategory not found";
+    public static final String NotAuthorized = "Not authorized";
 }

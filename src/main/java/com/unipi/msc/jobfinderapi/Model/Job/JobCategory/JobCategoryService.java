@@ -12,7 +12,7 @@ import java.util.Optional;
 public class JobCategoryService {
     private final JobCategoryRepository jobCategoryRepository;
     public Optional<JobCategory> getCategoryById(Long Id){
-        return jobCategoryRepository.findById(Id);
+        return jobCategoryRepository.findJobCategoryById(Id);
     }
 
     public List<JobCategory> getCategories() {
