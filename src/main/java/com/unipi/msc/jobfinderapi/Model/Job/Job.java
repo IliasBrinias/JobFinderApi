@@ -11,7 +11,8 @@ import com.unipi.msc.jobfinderapi.Model.User.Client;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -19,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Job {
+public class Job implements Serializable {
     @Id
     @GeneratedValue
     private Long Id;
@@ -32,12 +33,22 @@ public class Job {
     private Visibility priceVisibility;
     @ManyToOne
     private Client client;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private JobSubCategory jobSubCategory;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "job_duration_id")
+    @JsonBackReference
+    private JobDuration jobDuration;
+    @ManyToOne
+    @JoinColumn(name = "payment_type_id")
+    @JsonBackReference
     private PaymentType paymentType;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private JobDuration duration;
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Skill> skills = new java.util.ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "job_sub_category_id")
+    @JsonBackReference
+    private JobSubCategory jobSubCategory;
+    @ManyToMany
+    @JoinTable(name = "job_skills",
+            joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "Id"),
+            inverseJoinColumns = @JoinColumn(name = "skills_id", referencedColumnName = "Id"))
+    @JsonManagedReference
+    private Set<Skill> skills = new java.util.LinkedHashSet<>();
 }

@@ -7,10 +7,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class JobRequest {
     private String title;
     @Enumerated(EnumType.STRING)

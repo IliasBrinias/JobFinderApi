@@ -1,31 +1,19 @@
 package com.unipi.msc.jobfinderapi.config;
 
+import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import netscape.javascript.JSObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -51,9 +39,13 @@ public class SecurityConfiguration {
                 .and()
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("timestamp", new Date());
-                    jsonObject.put("status", 403);
-                    jsonObject.put("message", "Access denied");
+                    if (authException.getLocalizedMessage().equals("Bad credentials")){
+                        jsonObject.put("error", ErrorMessages.USER_NOT_FOUND);
+                    }else {
+                        jsonObject.put("timestamp", new Date());
+                        jsonObject.put("status", 403);
+                        jsonObject.put("message", "Access denied");
+                    }
 
                     response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(403);

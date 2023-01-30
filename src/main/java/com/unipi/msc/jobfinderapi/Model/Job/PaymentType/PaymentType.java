@@ -1,10 +1,12 @@
 package com.unipi.msc.jobfinderapi.Model.Job.PaymentType;
 
-import jakarta.persistence.Access;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.unipi.msc.jobfinderapi.Model.Job.Job;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,4 +19,8 @@ public class PaymentType {
     @GeneratedValue
     private Long Id;
     private String type;
+    @OneToMany(mappedBy = "paymentType", orphanRemoval = true)
+    @JsonManagedReference
+    @JsonIgnore
+    List<Job> jobs = new java.util.ArrayList<>();
 }

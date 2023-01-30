@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class SkillService {
     private final SkillRepository skillRepository;
-    public Optional<List<Skill>> getSkillsByIdIn(List<Long> idList){
+    public Optional<Set<Skill>> getSkillsByIdIn(List<Long> idList){
         return skillRepository.findByIdIn(idList);
     }
 
