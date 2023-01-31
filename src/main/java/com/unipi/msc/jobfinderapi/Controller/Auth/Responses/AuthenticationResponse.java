@@ -1,5 +1,6 @@
 package com.unipi.msc.jobfinderapi.Controller.Auth.Responses;
 
+import com.unipi.msc.jobfinderapi.Model.Job.Job;
 import com.unipi.msc.jobfinderapi.Model.Link.Link;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
@@ -30,6 +31,7 @@ public class AuthenticationResponse {
     // Client
     private String dsc;
     private List<Link> link;
+    private List<Job> jobs;
 
     //Dev
     private List<Skill> skills;

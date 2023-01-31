@@ -12,7 +12,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SkillService {
     private final SkillRepository skillRepository;
-    public Optional<Set<Skill>> getSkillsByIdIn(List<Long> idList){
+    public Optional<List<Skill>> getSkillsByIdIn(List<Long> idList){
         return skillRepository.findByIdIn(idList);
     }
 

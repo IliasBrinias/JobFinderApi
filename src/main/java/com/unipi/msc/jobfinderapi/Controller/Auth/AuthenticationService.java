@@ -4,7 +4,7 @@ import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.LoginRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.RegisterRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.AuthenticationResponse;
-import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.User.Admin;
 import com.unipi.msc.jobfinderapi.Model.User.Client;
 import com.unipi.msc.jobfinderapi.Model.User.Developer;
@@ -39,65 +39,59 @@ public class AuthenticationService {
         if (!error_msg.equals("")) return ResponseEntity.badRequest().body(new ErrorResponse(false,error_msg));
 
         // build user object and save it
-        try {
-            User user;
-            if (request.getRole() == Role.CLIENT){
-                user = new Client(request.getEmail(),
-                        request.getUsername(),
-                        passwordEncoder.encode(request.getPassword()),
-                        request.getRole(),
-                        request.getGender(),
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getBirthday(),
-                        false,
-                        request.getDsc()
-                        );
-            }
-            else if (request.getRole()==Role.DEVELOPER){
-                user = new Developer(request.getEmail(),
-                        request.getUsername(),
-                        passwordEncoder.encode(request.getPassword()),
-                        request.getRole(),
-                        request.getGender(),
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getBirthday(),
-                        false,
-                        request.getDsc(),
-                        new ArrayList<>(),
-                        new ArrayList<>()
-                );
-            }
-            else if (request.getRole()==Role.ADMIN){
-                user = new Admin(request.getEmail(),
-                        request.getUsername(),
-                        passwordEncoder.encode(request.getPassword()),
-                        request.getRole(),
-                        request.getGender(),
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getBirthday(),
-                        false);
-            }else {
-                return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_IS_NULL));
-            }
-            userRepository.save(user);
-            return ResponseEntity.ok(getAuthenticationResponse(user));
-        }catch(Exception e) {
-            return ResponseEntity.ok(ErrorResponse.handleSqlError(e));
+        User user;
+        if (request.getRole() == Role.CLIENT){
+            user = new Client(request.getEmail(),
+                    request.getUsername(),
+                    passwordEncoder.encode(request.getPassword()),
+                    request.getRole(),
+                    request.getGender(),
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getBirthday(),
+                    false,
+                    request.getDsc()
+                    );
         }
-
+        else if (request.getRole()==Role.DEVELOPER){
+            user = new Developer(request.getEmail(),
+                    request.getUsername(),
+                    passwordEncoder.encode(request.getPassword()),
+                    request.getRole(),
+                    request.getGender(),
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getBirthday(),
+                    false,
+                    request.getDsc(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+            );
+        }
+        else if (request.getRole()==Role.ADMIN){
+            user = new Admin(request.getEmail(),
+                    request.getUsername(),
+                    passwordEncoder.encode(request.getPassword()),
+                    request.getRole(),
+                    request.getGender(),
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getBirthday(),
+                    false);
+        }else {
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_IS_NULL));
+        }
+        userRepository.save(user);
+        return ResponseEntity.ok(getAuthenticationResponse(user, jwtService.generateToken(user)));
     }
     public ResponseEntity<?> authenticate(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
         // double check if the user exists
         if (!userRepository.findByUsername(request.getUsername()).isPresent()) return ResponseEntity.notFound().build();
         User user = userRepository.findByUsername(request.getUsername()).get();
-        return ResponseEntity.ok(getAuthenticationResponse(user));
+        return ResponseEntity.ok(getAuthenticationResponse(user, jwtService.generateToken(user)));
     }
-    public AuthenticationResponse getAuthenticationResponse(User user) {
-        var jwtToken = jwtService.generateToken(user);
+    public AuthenticationResponse getAuthenticationResponse(User user, String jwtToken) {
         AuthenticationResponse response = AuthenticationResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -112,11 +106,13 @@ public class AuthenticationService {
         if (user instanceof Client){
             Client c = (Client) user;
             response.setDsc(c.getDsc());
+            response.setLink(c.getLinks());
+            response.setJobs(c.getJobList());
         }
         if (user instanceof Developer){
             Developer d = (Developer) user;
             response.setDsc(d.getDsc());
-            response.setLink(d.getLink());
+            response.setLink(d.getLinks());
             response.setSkills(d.getSkills());
         }
         return response;

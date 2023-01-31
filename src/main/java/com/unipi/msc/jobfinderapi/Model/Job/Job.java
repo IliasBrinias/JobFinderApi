@@ -1,6 +1,7 @@
 package com.unipi.msc.jobfinderapi.Model.Job;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
@@ -12,6 +13,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,6 +35,7 @@ public class Job implements Serializable {
     @Enumerated
     private Visibility priceVisibility;
     @ManyToOne
+    @JsonIgnore
     private Client client;
     @ManyToOne
     @JoinColumn(name = "job_duration_id")
@@ -45,10 +49,10 @@ public class Job implements Serializable {
     @JoinColumn(name = "job_sub_category_id")
     @JsonBackReference
     private JobSubCategory jobSubCategory;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "job_skills",
             joinColumns = @JoinColumn(name = "job_id", referencedColumnName = "Id"),
             inverseJoinColumns = @JoinColumn(name = "skills_id", referencedColumnName = "Id"))
     @JsonManagedReference
-    private Set<Skill> skills = new java.util.LinkedHashSet<>();
+    private List<Skill> skills = new ArrayList<>();
 }

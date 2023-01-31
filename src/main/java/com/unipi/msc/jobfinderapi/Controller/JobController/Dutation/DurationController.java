@@ -2,7 +2,7 @@ package com.unipi.msc.jobfinderapi.Controller.JobController.Dutation;
 
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.DurationRequest;
-import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDurationRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDurationService;

@@ -3,7 +3,7 @@ package com.unipi.msc.jobfinderapi.Controller.JobController;
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.JobRequest;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.JobPresenter;
-import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.Job;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
@@ -19,15 +19,12 @@ import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.User.Client;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -85,13 +82,13 @@ public class JobController {
         try {
             client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (ClassCastException ignore){
-            return ResponseEntity.status(403).body(new ErrorResponse(false,ErrorMessages.NotAuthorized));
+            return ResponseEntity.status(403).body(new ErrorResponse(false,ErrorMessages.NOT_AUTHORIZED));
         }
 
         JobDuration jobDuration = null;
         JobSubCategory jobSubCategory = null;
         PaymentType paymentType = null;
-        Set<Skill> skills = new HashSet<>();
+        List<Skill> skills = null;
 
         if (request.getDurationId() != null) {
             jobDuration = jobDurationService.getDurationById(request.getDurationId()).orElse(null);
@@ -169,7 +166,7 @@ public class JobController {
             job.setJobDuration(jobDuration);
         }
         if (request.getSkillList() != null){
-            Set<Skill> skills = skillService.getSkillsByIdIn(request.getSkillList()).orElse(null);
+            List<Skill> skills = skillService.getSkillsByIdIn(request.getSkillList()).orElse(null);
             if (skills == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.SKILLS_NOT_FOUND));
             job.setSkills(skills);
         }

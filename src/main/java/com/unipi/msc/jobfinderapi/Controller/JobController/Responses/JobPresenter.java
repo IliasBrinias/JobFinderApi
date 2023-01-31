@@ -33,5 +33,5 @@ public class JobPresenter {
     private JobSubCategory jobSubCategory;
     private PaymentType paymentType;
     private JobDuration duration;
-    private Set<Skill> skills;
+    private List<Skill> skills;
 }

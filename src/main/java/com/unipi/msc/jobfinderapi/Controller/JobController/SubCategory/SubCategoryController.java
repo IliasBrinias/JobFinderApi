@@ -3,7 +3,7 @@ package com.unipi.msc.jobfinderapi.Controller.JobController.SubCategory;
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.SubCategoryRequest;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.SubCategoryResponse;
-import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryService;
@@ -13,11 +13,6 @@ import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategoryService
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("job/subcategory")

@@ -2,7 +2,7 @@ package com.unipi.msc.jobfinderapi.Controller.JobController.PaymentType;
 
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.PaymentTypeRequest;
-import com.unipi.msc.jobfinderapi.Controller.responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentTypeRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentTypeService;

@@ -32,5 +32,5 @@ public class Skill implements Serializable {
     @JsonIgnore
     @ManyToMany(mappedBy = "skills", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JsonBackReference
-    private Set<Job> jobs = new java.util.LinkedHashSet<>();
+    private List<Job> jobs = new ArrayList<>();
 }

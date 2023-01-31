@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill,Long> {
-    Optional<Set<Skill>> findByIdIn(List<Long> idList);
+    Optional<List<Skill>> findByIdIn(List<Long> idList);
     Optional<Skill> findById(Long id);
     List<Skill> findAll();
     Integer deleteSkillById(Long id);

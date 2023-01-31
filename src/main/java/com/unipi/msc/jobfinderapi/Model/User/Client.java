@@ -17,11 +17,12 @@ import java.util.List;
 @DiscriminatorValue(value = "CLIENT")
 public class Client extends User {
     private String dsc;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user", cascade ={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JsonManagedReference
     private List<Link> links = new java.util.ArrayList<>();
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JsonManagedReference
     private List<Job> jobList;
 
     public Client(@NonNull String email, @NonNull String username, @NonNull Role role, String dsc) {
