@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/job/duration")
 public class DurationController {

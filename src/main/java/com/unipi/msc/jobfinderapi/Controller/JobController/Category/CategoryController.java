@@ -1,25 +1,17 @@
 package com.unipi.msc.jobfinderapi.Controller.JobController.Category;
 
-import com.google.gson.GsonBuilder;
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.CategoryRequest;
-import com.unipi.msc.jobfinderapi.Controller.JobController.Request.SubCategoryRequest;
-import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.SubCategoryResponse;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryService;
-import com.unipi.msc.jobfinderapi.Model.Job.JobRepository;
-import com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/job/category")
 @RequiredArgsConstructor
 public class CategoryController {

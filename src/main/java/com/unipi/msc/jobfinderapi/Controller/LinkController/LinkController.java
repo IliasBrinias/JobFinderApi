@@ -17,14 +17,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/link")
 public class LinkController {
     private final LinkService linkService;
     private final UserRepository userRepository;
     private final LinkRepository linkRepository;
-    private final JobCategoryRepository jobCategoryRepository;
 
     @GetMapping
     public ResponseEntity<?> getLinks() {

@@ -1,12 +1,12 @@
 package com.unipi.msc.jobfinderapi.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Component
+@Configuration
 public class CorsConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -17,7 +17,8 @@ public class CorsConfig {
                         .addMapping("/**")
                         .allowedMethods(CorsConfiguration.ALL)
                         .allowedHeaders(CorsConfiguration.ALL)
-                        .allowedOriginPatterns(CorsConfiguration.ALL);
+                        .allowedOriginPatterns(CorsConfiguration.ALL)
+                        .allowedOrigins("http://localhost:8080");
             }
         };
     }
