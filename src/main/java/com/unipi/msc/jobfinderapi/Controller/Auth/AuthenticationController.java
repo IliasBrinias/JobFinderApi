@@ -36,7 +36,7 @@ public class AuthenticationController {
     public ResponseEntity<?> enableAccount(@RequestHeader("Authorization") String token) {
         return authenticationService.enableUserAccount(token);
     }
-    @PostMapping("/test")
+    @GetMapping("/test")
     public ResponseEntity<?> test() {
         return ResponseEntity.ok(new ErrorResponse(true,"ok"));
     }
