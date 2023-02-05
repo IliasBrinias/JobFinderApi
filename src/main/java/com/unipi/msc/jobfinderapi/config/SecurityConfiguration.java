@@ -41,10 +41,12 @@ public class SecurityConfiguration {
                     JSONObject jsonObject = new JSONObject();
                     if (authException.getLocalizedMessage().equals("Bad credentials")){
                         jsonObject.put("error", ErrorMessages.USER_NOT_FOUND);
+                    }else if (authException.getLocalizedMessage().equals("User is disabled")) {
+                        jsonObject.put("error", ErrorMessages.USER_IS_DISABLE);
                     }else {
                         jsonObject.put("timestamp", new Date());
                         jsonObject.put("status", 403);
-                        jsonObject.put("message", "Access denied");
+                        jsonObject.put("message", ErrorMessages.ACCESS_DENIED);
                     }
 
                     response.setContentType("application/json;charset=UTF-8");
@@ -53,8 +55,7 @@ public class SecurityConfiguration {
                 })
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                ;
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

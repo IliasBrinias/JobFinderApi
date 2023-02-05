@@ -5,13 +5,10 @@ import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.LoginRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.RegisterRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.AuthenticationResponse;
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
-import com.unipi.msc.jobfinderapi.Model.User.Admin;
-import com.unipi.msc.jobfinderapi.Model.User.Client;
-import com.unipi.msc.jobfinderapi.Model.User.Developer;
+import com.unipi.msc.jobfinderapi.Model.User.*;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
-import com.unipi.msc.jobfinderapi.Model.User.User;
-import com.unipi.msc.jobfinderapi.Model.User.UserRepository;
 import com.unipi.msc.jobfinderapi.config.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +22,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -124,5 +122,28 @@ public class AuthenticationService {
             return ErrorMessages.EMAIL_EXISTS;
         }
         return "";
+    }
+    public ResponseEntity<?> enableUserAccount(String token) {
+        String jwt, userEmail;
+        // check if the header has Bearer token
+        if (token == null || !token.startsWith("Bearer "))
+            return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.NO_HEADER_FOUND));
+        // get the token from the Bearer and extract the username
+        jwt = token.substring(7);
+        try {
+            userEmail = jwtService.extractUsername(jwt);
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.TOKEN_EXPIRED));
+        }
+        User u = userService.getUserByUsername(userEmail).orElse(null);
+        if (u == null)
+            return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.USER_NOT_FOUND));
+        u.setIsVerified(true);
+        userRepository.save(u);
+        return ResponseEntity.ok(getAuthenticationResponse(u,jwtService.generateToken(u)));
+    }
+
+    private void sendVerificationEmail(){
+        
     }
 }

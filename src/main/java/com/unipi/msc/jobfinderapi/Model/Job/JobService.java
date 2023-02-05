@@ -1,5 +1,6 @@
 package com.unipi.msc.jobfinderapi.Model.Job;
 
+import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class JobService {
     }
 
     public List<Job> getJobs() {
+//        return jobRepository.findAllByJobVisibilityNot(Visibility.PRIVATE);
         return jobRepository.findAll();
     }
 }

@@ -17,4 +17,8 @@ public class ErrorMessages {
     public static final String NOT_AUTHORIZED = "Not authorized";
     public static final String LINK_NOT_FOUND = "Link not found";
     public static final String SKILL_NOT_FOUND = "Skill not found";
+    public static final String USER_IS_DISABLE = "User is disable";
+    public static final String NO_HEADER_FOUND = "No header found";
+    public static final String ACCESS_DENIED = "Access denied";
+    public static final String TOKEN_EXPIRED = "Token expired";
 }
