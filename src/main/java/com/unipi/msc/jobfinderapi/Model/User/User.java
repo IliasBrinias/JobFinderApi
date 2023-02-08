@@ -101,6 +101,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isVerified;
+//        TODO: Temporary the user is enable
+//        return isVerified;
+        return true;
     }
 }
