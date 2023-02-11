@@ -21,7 +21,7 @@ public class JobService {
     }
 
     public List<Job> getJobs() {
-//        return jobRepository.findAllByJobVisibilityNot(Visibility.PRIVATE);
-        return jobRepository.findAll();
+        return jobRepository.findAllByJobVisibilityNot(Visibility.PRIVATE);
     }
+
 }

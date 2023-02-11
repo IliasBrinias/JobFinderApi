@@ -15,7 +15,6 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -28,8 +27,10 @@ public class Job implements Serializable {
     @GeneratedValue
     private Long Id;
     private String title;
-    private double price;
-    private double maxPrice;
+    private String description;
+    private Long price;
+    private Long maxPrice;
+    private Long creationDate;
     @Enumerated
     private Visibility jobVisibility;
     @Enumerated

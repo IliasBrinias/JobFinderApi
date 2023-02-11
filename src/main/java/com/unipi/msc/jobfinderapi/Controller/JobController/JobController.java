@@ -2,11 +2,14 @@ package com.unipi.msc.jobfinderapi.Controller.JobController;
 
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Request.JobRequest;
+import com.unipi.msc.jobfinderapi.Controller.JobController.Request.SearchJobRequest;
 import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.JobPresenter;
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.Job;
+import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
+import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryService;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDurationService;
 import com.unipi.msc.jobfinderapi.Model.Job.JobRepository;
@@ -18,13 +21,19 @@ import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentTypeService;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.User.Client;
+import com.unipi.msc.jobfinderapi.Shared.Tools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -38,8 +47,9 @@ public class JobController {
     private final SkillService skillService;
     private final PaymentTypeService paymentTypeService;
     private final JobCategoryRepository jobCategoryRepository;
+    private final JobCategoryService jobCategoryService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getJobs() {
         List<Job> jobList = jobService.getJobs();
         List<JobPresenter> jobPresenterList = new ArrayList<>();
@@ -48,6 +58,8 @@ public class JobController {
                     JobPresenter.builder()
                             .Id(j.getId())
                             .title(j.getTitle())
+                            .description(j.getDescription())
+                            .creationDate(j.getCreationDate())
                             .username(j.getClient().getUsername())
                             .price(j.getPrice())
                             .jobSubCategory(j.getJobSubCategory())
@@ -60,6 +72,64 @@ public class JobController {
         }
         return ResponseEntity.ok(jobPresenterList);
     }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchJob(@RequestBody SearchJobRequest request){
+        JobSubCategory jobSubCategory;
+        if (request.getCategory()!=null){
+            jobSubCategory = jobSubCategoryService.getSubCategoryById(request.getCategory()).orElse(null);
+            if (jobSubCategory == null) {
+                return ResponseEntity.badRequest().body(ErrorMessages.JOB_SUBCATEGORY_NOT_FOUND);
+            }
+        } else {
+            jobSubCategory = null;
+        }
+
+        List<Job> jobList = jobService.getJobs();
+        List<Job> filteredList = jobList.stream().filter(job -> {
+            // category
+            if (jobSubCategory != null) {
+                return job.getJobSubCategory() == jobSubCategory;
+            }
+            return true;
+        }).filter(job ->{
+            // creation date
+            if (request.getCreationDate() == null || job.getCreationDate() == null) return true;
+            return Tools.between(request.getCreationDate().getFrom(),request.getCreationDate().getTo(),job.getCreationDate());
+        }).filter(job->{
+            // skills
+            if (request.getSkillList() != null) {
+                return job.getSkills().stream().anyMatch(skill -> request.getSkillList().stream().anyMatch(id -> Objects.equals(id, skill.getId())));
+            }
+            return true;
+        }).filter(job -> {
+            // title
+            if (request.getTitle() != null) {
+                return job.getTitle().contains(request.getTitle());
+            }
+            return true;
+        }).filter(job -> {
+            // payment Type
+            if (request.getPaymentType() != null){
+                return Objects.equals(job.getPaymentType().getId(), request.getPaymentType());
+            }
+            return true;
+        }).filter(job->{
+            // price
+            if (request.getPrice()!=null){
+                if (request.getPrice().getFrom()!=null){
+                    if (job.getPrice()<=request.getPrice().getFrom()){
+                        return false;
+                    }
+                }
+                if (request.getPrice().getTo()!=null){
+                    return job.getPrice() < request.getPrice().getTo();
+                }
+            }
+            return true;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredList);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getJob(@PathVariable Long id) {
         Job j = jobService.getJobWithId(id).orElse(null);
@@ -67,6 +137,8 @@ public class JobController {
         JobPresenter jobPresenter = JobPresenter.builder()
                 .Id(j.getId())
                 .title(j.getTitle())
+                .description(j.getDescription())
+                .creationDate(j.getCreationDate())
                 .username(j.getClient().getUsername())
                 .price(j.getPrice())
                 .jobSubCategory(j.getJobSubCategory())
@@ -105,7 +177,9 @@ public class JobController {
         }
         Job job = Job.builder()
                 .title(request.getTitle())
+                .description(request.getDsc())
                 .client(client)
+                .creationDate(new Date().getTime())
                 .jobVisibility(Visibility.valueOf(request.getJobVisibility().toString()))
                 .price(request.getPrice())
                 .priceVisibility(Visibility.valueOf(request.getPriceVisibility().toString()))
@@ -119,6 +193,8 @@ public class JobController {
         JobPresenter jobPresenter = JobPresenter.builder()
                 .Id(job.getId())
                 .title(job.getTitle())
+                .creationDate(job.getCreationDate())
+                .description(job.getTitle())
                 .username(job.getClient().getUsername())
                 .price(job.getPrice())
                 .jobSubCategory(job.getJobSubCategory())
@@ -138,6 +214,9 @@ public class JobController {
 
         if (request.getTitle() != null && !request.getTitle().equals("")){
             job.setTitle(request.getTitle());
+        }
+        if (request.getDsc() != null && !request.getDsc().equals("")){
+            job.setTitle(request.getDsc());
         }
         if (request.getJobVisibility()!=null){
             job.setJobVisibility(request.getJobVisibility());
@@ -175,6 +254,7 @@ public class JobController {
         JobPresenter jobPresenter = JobPresenter.builder()
                 .Id(job.getId())
                 .title(job.getTitle())
+                .description(job.getDescription())
                 .username(job.getClient().getUsername())
                 .price(job.getPrice())
                 .jobSubCategory(job.getJobSubCategory())

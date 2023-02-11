@@ -14,12 +14,13 @@ import java.util.List;
 @Setter
 public class JobRequest {
     private String title;
+    private String dsc;
     @Enumerated(EnumType.STRING)
     private Visibility jobVisibility;
     @Enumerated(EnumType.STRING)
     private Visibility priceVisibility;
-    private double price;
-    private double maxPrice;
+    private Long price;
+    private Long maxPrice;
     private Long subCategoryId;
     private Long paymentTypeId;
     private Long durationId;
