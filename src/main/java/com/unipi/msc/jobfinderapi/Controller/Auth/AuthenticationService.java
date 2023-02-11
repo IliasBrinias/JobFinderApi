@@ -6,12 +6,17 @@ import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.RegisterRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.AuthenticationResponse;
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
+import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
+import com.unipi.msc.jobfinderapi.Model.Skills.SkillRepository;
+import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.User.*;
+import com.unipi.msc.jobfinderapi.config.AsyncClient;
 import com.unipi.msc.jobfinderapi.config.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.apache.catalina.core.ApplicationContext;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +24,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +36,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final SkillService skillService;
+    private final SkillRepository skillRepository;
+
     public ResponseEntity<?> register(RegisterRequest request) {
         // check for empty data
         if (request.getUsername().equals("") || request.getEmail().equals("") || request.getPassword().equals("")) {
@@ -41,13 +49,21 @@ public class AuthenticationService {
         String error_msg = checkIfExist(request);
         if (!error_msg.equals("")) return ResponseEntity.badRequest().body(new ErrorResponse(false,error_msg));
 
+
+        Role role;
+        try {
+            role = Role.valueOf(request.getRole());
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_DOESNT_EXIST));
+        }
+
         // build user object and save it
         User user;
-        if (request.getRole() == Role.CLIENT){
+        if (role == Role.CLIENT){
             user = new Client(request.getEmail(),
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
-                    request.getRole(),
+                    role,
                     request.getGender(),
                     request.getFirstName(),
                     request.getLastName(),
@@ -56,11 +72,23 @@ public class AuthenticationService {
                     request.getDsc()
                     );
         }
-        else if (request.getRole()==Role.DEVELOPER){
+        else if (role==Role.DEVELOPER){
+            if (request.getSkills() != null){
+                List<Skill> skillList = new ArrayList<>();
+                for (Skill s : request.getSkills()) {
+                    if (s.getSkill() == null) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.SKILL_IS_NULL));
+
+                    skillList.add(Skill.builder()
+                            .skill(s.getSkill())
+                            .alias(s.getAlias()).build());
+                }
+                request.setSkills(skillRepository.saveAll(skillList));
+                System.out.println(request.getSkills());
+            }
             user = new Developer(request.getEmail(),
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
-                    request.getRole(),
+                    role,
                     request.getGender(),
                     request.getFirstName(),
                     request.getLastName(),
@@ -68,14 +96,14 @@ public class AuthenticationService {
                     false,
                     request.getDsc(),
                     new ArrayList<>(),
-                    new ArrayList<>()
+                    request.getSkills()
             );
         }
-        else if (request.getRole()==Role.ADMIN){
+        else if (role==Role.ADMIN){
             user = new Admin(request.getEmail(),
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
-                    request.getRole(),
+                    role,
                     request.getGender(),
                     request.getFirstName(),
                     request.getLastName(),
@@ -88,9 +116,10 @@ public class AuthenticationService {
         String generatedToken = jwtService.generateToken(user);
         if (!user.isEnabled()){
 //            TODO: Temporary the user is enable
-            sendVerificationEmail(user.getEmail(),generatedToken);
+            AsyncClient.sendEmail(user.getEmail(),generatedToken);
         }
-        return ResponseEntity.ok(getAuthenticationResponse(user, null));
+//        TODO: Temporary token generated
+        return ResponseEntity.ok(getAuthenticationResponse(user, generatedToken));
     }
     public ResponseEntity<?> authenticate(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
@@ -148,54 +177,10 @@ public class AuthenticationService {
         return ResponseEntity.ok(getAuthenticationResponse(u,jwtService.generateToken(u)));
     }
 
-    private void sendVerificationEmail(String emailTo, String token){
-        try {
-            //TODO: Change the way of json creation
-            JSONObject bodyJson = new JSONObject();
-
-            JSONObject jsonObject = new JSONObject();
-            JSONObject receiverObject = new JSONObject();
-            JSONObject senderObject = new JSONObject();
-
-            JSONArray mailArray = new JSONArray();
-            JSONObject mailObject = new JSONObject();
-            mailObject.put("email",emailTo);
-            mailArray.add(mailObject);
-            receiverObject.put("to",mailArray);
-
-            receiverObject.put("subject","Enable your account");
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.add(receiverObject);
-
-            senderObject.put("email","info@jobfinder.com");
-            jsonObject.put("personalizations",jsonArray);
-            jsonObject.put("from",senderObject);
-            bodyJson.put("type","text/html");
-            bodyJson.put("value","<a class='btn' href='http://127.0.0.1:8080/auth/enable?token="+token+">Open it</a>");
-            JSONArray jsonArray1 = new JSONArray();
-            jsonArray1.add(bodyJson);
-            jsonObject.put("content",jsonArray1);
-
-            AsyncHttpClient client = new DefaultAsyncHttpClient();
-            client.prepare("POST", "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send")
-                    .setHeader("content-type", "application/json")
-                    .setHeader("X-RapidAPI-Key", "d8455cfac5mshb2e12524fc60827p13bf2fjsna477236d177e")
-                    .setHeader("X-RapidAPI-Host", "rapidprod-sendgrid-v1.p.rapidapi.com")
-                    .setBody(jsonObject.toJSONString())
-            .execute()
-            .toCompletableFuture()
-            .thenAccept(System.out::println)
-            .join();
-            client.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public ResponseEntity<?> resendEmail(String email) {
         User u = userService.getUserByEmail(email).orElse(null);
         if (u == null) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.USER_NOT_FOUND));
-        sendVerificationEmail(email,jwtService.generateToken(u));
+        AsyncClient.sendEmail(email,jwtService.generateToken(u));
         return ResponseEntity.ok().build();
     }
 }

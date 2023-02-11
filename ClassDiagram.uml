@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.unipi.msc.jobfinderapi.Model.User.Client</OriginalElement>
+  <nodes>
+    <node x="674.0" y="745.0">com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType</node>
+    <node x="98.0" y="745.0">com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration</node>
+    <node x="234.0" y="-15.0">com.unipi.msc.jobfinderapi.Model.Enum.Gender</node>
+    <node x="424.0" y="545.0">com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory</node>
+    <node x="-64.0" y="1025.0">com.unipi.msc.jobfinderapi.Model.User.Developer</node>
+    <node x="136.5" y="579.5">com.unipi.msc.jobfinderapi.Model.User.Admin</node>
+    <node x="-49.0" y="745.0">com.unipi.msc.jobfinderapi.Model.Enum.Visibility</node>
+    <node x="70.0" y="188.0">com.unipi.msc.jobfinderapi.Model.User.User</node>
+    <node x="210.5" y="937.0">com.unipi.msc.jobfinderapi.Model.Job.Job</node>
+    <node x="86.0" y="-15.0">com.unipi.msc.jobfinderapi.Model.Enum.Role</node>
+    <node x="450.5" y="734.0">com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory</node>
+    <node x="-78.0" y="1303.0">com.unipi.msc.jobfinderapi.Model.Skills.Skill</node>
+    <node x="272.0" y="745.0">com.unipi.msc.jobfinderapi.Model.User.Client</node>
+    <node x="266.0" y="534.0">com.unipi.msc.jobfinderapi.Model.Link.Link</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.Enum.Visibility" relationship="TO_ONE">
+      <point x="-60.0" y="-137.0" />
+      <point x="263.0" y="874.0" />
+      <point x="3.0" y="874.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Skills.Skill" target="com.unipi.msc.jobfinderapi.Model.User.Developer" relationship="TO_ONE">
+      <point x="-40.0" y="-71.0" />
+      <point x="-40.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Admin" target="com.unipi.msc.jobfinderapi.Model.User.User" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.5" />
+      <point x="183.0" y="554.0" />
+      <point x="103.0" y="554.0" />
+      <point x="-40.0" y="126.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Skills.Skill" target="com.unipi.msc.jobfinderapi.Model.Job.Job" relationship="TO_MANY">
+      <point x="-40.0" y="-71.0" />
+      <point x="-37.0" y="1254.0" />
+      <point x="263.0" y="1254.0" />
+      <point x="-60.0" y="137.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.Skills.Skill" relationship="TO_MANY">
+      <point x="-20.0" y="137.0" />
+      <point x="303.0" y="1274.0" />
+      <point x="43.0" y="1274.0" />
+      <point x="40.0" y="-71.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.User" target="com.unipi.msc.jobfinderapi.Model.Enum.Gender" relationship="TO_ONE">
+      <point x="0.0" y="-126.0" />
+      <point x="143.0" y="154.0" />
+      <point x="283.0" y="154.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory" relationship="TO_ONE">
+      <point x="-60.0" y="-137.0" />
+      <point x="263.0" y="874.0" />
+      <point x="494.66666666666663" y="874.0" />
+      <point x="-48.33333333333337" y="60.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Link.Link" target="com.unipi.msc.jobfinderapi.Model.User.User" relationship="TO_ONE">
+      <point x="0.0" y="-60.0" />
+      <point x="323.0" y="514.0" />
+      <point x="178.33333333333331" y="514.0" />
+      <point x="35.333333333333314" y="126.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.User.Client" relationship="TO_ONE">
+      <point x="-60.0" y="-137.0" />
+      <point x="263.0" y="874.0" />
+      <point x="309.0" y="874.0" />
+      <point x="-34.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory" target="com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory" relationship="TO_ONE">
+      <point x="-40.0" y="-60.0" />
+      <point x="-60.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Client" target="com.unipi.msc.jobfinderapi.Model.Link.Link" relationship="TO_MANY">
+      <point x="40.0" y="-49.0" />
+      <point x="383.0" y="714.0" />
+      <point x="323.0" y="714.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory" target="com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory" relationship="TO_MANY">
+      <point x="20.0" y="49.0" />
+      <point x="40.0" y="-60.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Developer" target="com.unipi.msc.jobfinderapi.Model.User.User" relationship="GENERALIZATION">
+      <point x="-40.0" y="-49.0" />
+      <point x="-37.0" y="994.0" />
+      <point x="-117.0" y="994.0" />
+      <point x="-117.0" y="554.0" />
+      <point x="103.0" y="554.0" />
+      <point x="-40.0" y="126.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Client" target="com.unipi.msc.jobfinderapi.Model.User.User" relationship="GENERALIZATION">
+      <point x="-40.0" y="-49.0" />
+      <point x="303.0" y="694.0" />
+      <point x="103.0" y="694.0" />
+      <point x="-40.0" y="126.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Developer" target="com.unipi.msc.jobfinderapi.Model.Link.Link" relationship="TO_MANY">
+      <point x="40.0" y="-49.0" />
+      <point x="43.0" y="974.0" />
+      <point x="-77.0" y="974.0" />
+      <point x="-77.0" y="714.0" />
+      <point x="323.0" y="714.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType" relationship="TO_ONE">
+      <point x="-60.0" y="-137.0" />
+      <point x="263.0" y="874.0" />
+      <point x="708.5" y="874.0" />
+      <point x="-34.5" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentType" target="com.unipi.msc.jobfinderapi.Model.Job.Job" relationship="TO_MANY">
+      <point x="34.5" y="49.0" />
+      <point x="777.5" y="894.0" />
+      <point x="383.0" y="894.0" />
+      <point x="60.0" y="-137.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Developer" target="com.unipi.msc.jobfinderapi.Model.Skills.Skill" relationship="TO_MANY">
+      <point x="40.0" y="49.0" />
+      <point x="40.0" y="-71.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.Job" target="com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration" relationship="TO_ONE">
+      <point x="-60.0" y="-137.0" />
+      <point x="263.0" y="874.0" />
+      <point x="123.0" y="874.0" />
+      <point x="-40.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.User" target="com.unipi.msc.jobfinderapi.Model.Enum.Role" relationship="TO_ONE">
+      <point x="0.0" y="-126.0" />
+      <point x="0.0" y="49.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.JobSubCategory.JobSubCategory" target="com.unipi.msc.jobfinderapi.Model.Job.Job" relationship="TO_MANY">
+      <point x="40.0" y="60.0" />
+      <point x="583.0" y="894.0" />
+      <point x="383.0" y="894.0" />
+      <point x="60.0" y="-137.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration" target="com.unipi.msc.jobfinderapi.Model.Job.Job" relationship="TO_MANY">
+      <point x="30.0" y="49.0" />
+      <point x="193.0" y="894.0" />
+      <point x="383.0" y="894.0" />
+      <point x="60.0" y="-137.0" />
+    </edge>
+    <edge source="com.unipi.msc.jobfinderapi.Model.User.Client" target="com.unipi.msc.jobfinderapi.Model.Job.Job" relationship="TO_MANY">
+      <point x="40.0" y="49.0" />
+      <point x="60.0" y="-137.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.6412162162162162" showDependencies="true" x="356.33034773445706" y="696.9283456269761" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

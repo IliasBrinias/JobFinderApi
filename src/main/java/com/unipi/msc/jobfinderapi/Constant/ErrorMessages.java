@@ -21,4 +21,6 @@ public class ErrorMessages {
     public static final String NO_HEADER_FOUND = "No header found";
     public static final String ACCESS_DENIED = "Access denied";
     public static final String TOKEN_EXPIRED = "Token expired";
+    public static final String ROLE_DOESNT_EXIST = "Role doesn't exist";
+    public static final String SKILL_IS_NULL = "Skill is null";
 }

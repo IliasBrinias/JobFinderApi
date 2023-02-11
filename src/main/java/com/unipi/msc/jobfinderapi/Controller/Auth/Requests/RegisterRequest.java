@@ -3,6 +3,7 @@ package com.unipi.msc.jobfinderapi.Controller.Auth.Requests;
 import com.unipi.msc.jobfinderapi.Model.Link.Link;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
+import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
@@ -24,9 +25,9 @@ public class RegisterRequest {
     private String lastName;
     private Long birthday;
     private String dsc;
-    @NonNull
-    @Enumerated(EnumType.STRING)
-    private Role role;
+
+    private String role;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private List<Skill> skills;
 }
