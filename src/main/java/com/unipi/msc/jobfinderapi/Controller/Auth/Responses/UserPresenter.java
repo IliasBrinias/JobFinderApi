@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class UserPresenter {
     private Long id;
     private String email;
     private String username;
@@ -27,6 +27,8 @@ public class AuthenticationResponse {
     private Gender gender;
     private Long birthday;
     private String token;
+    private Long creationDate;
+    private Long rating;
 
     // Client
     private String dsc;

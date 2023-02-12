@@ -24,4 +24,7 @@ public class ErrorMessages {
     public static final String ROLE_DOESNT_EXIST = "Role doesn't exist";
     public static final String SKILL_IS_NULL = "Skill is null";
     public static final String NO_TOKEN_FOUND = "No token found";
+    public static final String FILE_NOT_FOUND = "File not found";
+    public static final String INVALID_FILE = "Invalid File";
+    public static final String PROFILE_NOT_FOUND = "Profile not found";
 }

@@ -1,4 +1,4 @@
-package com.unipi.msc.jobfinderapi.Controller.UserController;
+package com.unipi.msc.jobfinderapi.Controller.UserController.Request;
 
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Link.Link;

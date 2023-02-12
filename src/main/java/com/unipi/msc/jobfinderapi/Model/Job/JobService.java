@@ -20,8 +20,11 @@ public class JobService {
         return jobRepository.findById(id);
     }
 
-    public List<Job> getJobs() {
+    public List<Job> getJobsAuth() {
         return jobRepository.findAllByJobVisibilityNot(Visibility.PRIVATE);
+    }
+    public List<Job> getJobsPublic() {
+        return jobRepository.findAllByJobVisibilityIs(Visibility.PUBLIC);
     }
 
 }

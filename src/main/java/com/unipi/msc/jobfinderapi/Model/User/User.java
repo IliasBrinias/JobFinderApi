@@ -1,10 +1,13 @@
 package com.unipi.msc.jobfinderapi.Model.User;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import com.unipi.msc.jobfinderapi.Model.Link.Link;
+import com.unipi.msc.jobfinderapi.Model.User.Image.Image;
+import com.unipi.msc.jobfinderapi.Model.User.Rating.Rating;
 import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDao;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,14 +54,23 @@ public class User implements UserDetails {
     private String firstName;
     @Column
     private String lastName;
+    private Long creationDate;
+    private Long rating;
     @Column
     private Long birthday;
     @Column
     private Boolean isVerified = false;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users")
+    @JsonBackReference
+    private List<Rating> ratings;
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    List<UserDao> userDaos = new ArrayList<>();
+    private List<UserDao> userDaos = new ArrayList<>();
 
     public User(@NonNull String email, @NonNull String username, String password, @NonNull Role role, Gender gender, String firstName, String lastName, Long birthday, Boolean isVerified) {
         this.email = email;

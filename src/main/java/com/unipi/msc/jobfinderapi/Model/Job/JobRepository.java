@@ -15,4 +15,5 @@ public interface JobRepository extends JpaRepository<Job,Long> {
     Integer deleteJobById(Long Id);
     Optional<Job> findById(Long Id);
     List<Job> findAllByJobVisibilityNot(Visibility jobVisibility);
+    List<Job> findAllByJobVisibilityIs(Visibility jobVisibility);
 }

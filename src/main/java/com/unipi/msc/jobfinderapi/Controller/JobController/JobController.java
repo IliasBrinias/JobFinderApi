@@ -7,7 +7,6 @@ import com.unipi.msc.jobfinderapi.Controller.JobController.Responses.JobPresente
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Visibility;
 import com.unipi.msc.jobfinderapi.Model.Job.Job;
-import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategory;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryRepository;
 import com.unipi.msc.jobfinderapi.Model.Job.JobCategory.JobCategoryService;
 import com.unipi.msc.jobfinderapi.Model.Job.JobDuration.JobDuration;
@@ -21,9 +20,12 @@ import com.unipi.msc.jobfinderapi.Model.Job.PaymentType.PaymentTypeService;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.User.Client;
+import com.unipi.msc.jobfinderapi.Model.User.User;
 import com.unipi.msc.jobfinderapi.Shared.Tools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,7 +51,13 @@ public class JobController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getJobs() {
-        List<Job> jobList = jobService.getJobs();
+        List<Job> jobList;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken){
+            jobList = jobService.getJobsPublic();
+        }else{
+            jobList = jobService.getJobsAuth();
+        }
         List<JobPresenter> jobPresenterList = new ArrayList<>();
         for (Job j : jobList){
             jobPresenterList.add(
@@ -83,8 +89,13 @@ public class JobController {
         } else {
             jobSubCategory = null;
         }
-
-        List<Job> jobList = jobService.getJobs();
+        List<Job> jobList;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken){
+            jobList = jobService.getJobsPublic();
+        }else{
+            jobList = jobService.getJobsAuth();
+        }
         List<Job> filteredList = jobList.stream().filter(job -> {
             // category
             if (jobSubCategory != null) {

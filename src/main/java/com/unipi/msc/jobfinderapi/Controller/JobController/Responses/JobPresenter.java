@@ -23,8 +23,6 @@ public class JobPresenter {
     private Long creationDate;
     private Long price;
     private Long maxPrice;
-    private Visibility jobVisibility;
-    private Visibility priceVisibility;
     private String username;
     private JobSubCategory jobSubCategory;
     private PaymentType paymentType;

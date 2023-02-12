@@ -33,7 +33,13 @@ public class SecurityConfiguration {
                 .disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**","/job/all").permitAll()
+                .requestMatchers("/auth/**",
+                                 "/job/all",
+                                 "/job/search",
+                                 "/user/search",
+                                 "/user/*/info",
+                                 "/user/*/image"
+                        ).permitAll()
                 .requestMatchers("/client/**").hasRole(Role.CLIENT.name())
                 .requestMatchers("/dev/**").hasRole(Role.DEVELOPER.name())
                 .requestMatchers("/client/**","/dev/**","/admin/**").hasRole(Role.ADMIN.name())

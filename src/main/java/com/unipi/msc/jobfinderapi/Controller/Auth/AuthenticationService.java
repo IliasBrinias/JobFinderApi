@@ -3,7 +3,7 @@ package com.unipi.msc.jobfinderapi.Controller.Auth;
 import com.unipi.msc.jobfinderapi.Constant.ErrorMessages;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.LoginRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.RegisterRequest;
-import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.AuthenticationResponse;
+import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.UserPresenter;
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
@@ -138,8 +138,8 @@ public class AuthenticationService {
         User user = userRepository.findByUsername(request.getUsername()).get();
         return ResponseEntity.ok(getAuthenticationResponse(user, jwtService.generateToken(user)));
     }
-    public AuthenticationResponse getAuthenticationResponse(User user, String jwtToken) {
-        AuthenticationResponse response = AuthenticationResponse.builder()
+    public UserPresenter getAuthenticationResponse(User user, String jwtToken) {
+        UserPresenter response = UserPresenter.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .username(user.getUsername())
@@ -147,6 +147,8 @@ public class AuthenticationService {
                 .isVerified(user.getIsVerified())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .rating(user.getRating())
+                .creationDate(user.getCreationDate())
                 .gender(user.getGender())
                 .birthday(user.getBirthday())
                 .token(jwtToken).build();
