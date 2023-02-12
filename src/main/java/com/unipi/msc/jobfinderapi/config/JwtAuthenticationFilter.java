@@ -1,5 +1,7 @@
 package com.unipi.msc.jobfinderapi.config;
 
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDao;
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDaoService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserDaoService userDaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -44,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             // load the user and check if the token is valid
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt,userDetails)){
+            if (jwtService.isTokenValid(jwt,userDetails) && userDaoService.isTokenEnable(jwt)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

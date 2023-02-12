@@ -18,6 +18,10 @@ public class AuthenticationController {
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest request){
         return authenticationService.authenticate(request);
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(){
+        return authenticationService.logout();
+    }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         return authenticationService.register(request);

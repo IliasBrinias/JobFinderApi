@@ -1,9 +1,11 @@
 package com.unipi.msc.jobfinderapi.Model.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import com.unipi.msc.jobfinderapi.Model.Link.Link;
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDao;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -53,6 +55,10 @@ public class User implements UserDetails {
     private Long birthday;
     @Column
     private Boolean isVerified = false;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    List<UserDao> userDaos = new ArrayList<>();
 
     public User(@NonNull String email, @NonNull String username, String password, @NonNull Role role, Gender gender, String firstName, String lastName, Long birthday, Boolean isVerified) {
         this.email = email;

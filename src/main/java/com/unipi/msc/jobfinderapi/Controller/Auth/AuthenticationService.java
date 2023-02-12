@@ -10,22 +10,22 @@ import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillRepository;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillService;
 import com.unipi.msc.jobfinderapi.Model.User.*;
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDao;
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDaoRepository;
+import com.unipi.msc.jobfinderapi.Model.User.UserDao.UserDaoService;
 import com.unipi.msc.jobfinderapi.config.AsyncClient;
 import com.unipi.msc.jobfinderapi.config.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-import org.apache.catalina.core.ApplicationContext;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.io.IOException;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,6 +38,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final SkillService skillService;
     private final SkillRepository skillRepository;
+    private final UserDaoService userDaoService;
+    private final UserDaoRepository userDaoRepository;
 
     public ResponseEntity<?> register(RegisterRequest request) {
         // check for empty data
@@ -112,8 +114,16 @@ public class AuthenticationService {
         }else {
             return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_IS_NULL));
         }
-        userRepository.save(user);
+        user = userRepository.save(user);
+
         String generatedToken = jwtService.generateToken(user);
+        userDaoRepository.save(UserDao.builder()
+                .token(generatedToken)
+                .created(new Date().getTime())
+                .user(user)
+                .isActive(true)
+                .build());
+
         if (!user.isEnabled()){
 //            TODO: Temporary the user is enable
             AsyncClient.sendEmail(user.getEmail(),generatedToken);
@@ -181,6 +191,15 @@ public class AuthenticationService {
         User u = userService.getUserByEmail(email).orElse(null);
         if (u == null) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.USER_NOT_FOUND));
         AsyncClient.sendEmail(email,jwtService.generateToken(u));
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> logout() {
+        User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDao userDao = userDaoService.getLastToken(u).orElse(null);
+        if (userDao == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.NO_TOKEN_FOUND));
+        userDao.setIsActive(false);
+        userDaoRepository.save(userDao);
         return ResponseEntity.ok().build();
     }
 }

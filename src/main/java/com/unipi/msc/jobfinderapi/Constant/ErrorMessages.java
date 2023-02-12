@@ -23,4 +23,5 @@ public class ErrorMessages {
     public static final String TOKEN_EXPIRED = "Token expired";
     public static final String ROLE_DOESNT_EXIST = "Role doesn't exist";
     public static final String SKILL_IS_NULL = "Skill is null";
+    public static final String NO_TOKEN_FOUND = "No token found";
 }
