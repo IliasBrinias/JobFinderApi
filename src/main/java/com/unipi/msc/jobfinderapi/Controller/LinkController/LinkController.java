@@ -42,14 +42,6 @@ public class LinkController {
                 .name(request.getName())
                 .user(u)
                 .build();
-//        if (u instanceof Client){
-//            Client c = (Client) u;
-//            c.getLinks().add(link);
-//        }else if (u instanceof Developer){
-//            Developer d = (Developer) u;
-//            d.getLinks().add(link);
-//        }
-//        userRepository.save(u);
         return ResponseEntity.ok(linkRepository.save(link));
     }
 
