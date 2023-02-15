@@ -27,4 +27,5 @@ public class ErrorMessages {
     public static final String FILE_NOT_FOUND = "File not found";
     public static final String INVALID_FILE = "Invalid File";
     public static final String PROFILE_NOT_FOUND = "Profile not found";
+    public static String Gender_DOESNT_EXIST = "Gender does not exist";
 }

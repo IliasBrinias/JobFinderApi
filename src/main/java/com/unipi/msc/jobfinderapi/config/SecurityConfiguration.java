@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                                  "/user/*/info",
                                  "/user/*/image"
                         ).permitAll()
+                .requestMatchers("/auth/*/logout").authenticated()
                 .requestMatchers("/client/**").hasRole(Role.CLIENT.name())
                 .requestMatchers("/dev/**").hasRole(Role.DEVELOPER.name())
                 .requestMatchers("/client/**","/dev/**","/admin/**").hasRole(Role.ADMIN.name())

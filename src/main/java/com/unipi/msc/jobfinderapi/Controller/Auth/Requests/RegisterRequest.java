@@ -27,7 +27,6 @@ public class RegisterRequest {
     private String dsc;
 
     private String role;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String gender;
     private List<Skill> skills;
 }

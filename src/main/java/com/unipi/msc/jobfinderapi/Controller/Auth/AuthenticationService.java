@@ -5,6 +5,7 @@ import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.LoginRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Requests.RegisterRequest;
 import com.unipi.msc.jobfinderapi.Controller.Auth.Responses.UserPresenter;
 import com.unipi.msc.jobfinderapi.Controller.Responses.ErrorResponse;
+import com.unipi.msc.jobfinderapi.Model.Enum.Gender;
 import com.unipi.msc.jobfinderapi.Model.Enum.Role;
 import com.unipi.msc.jobfinderapi.Model.Skills.Skill;
 import com.unipi.msc.jobfinderapi.Model.Skills.SkillRepository;
@@ -53,10 +54,16 @@ public class AuthenticationService {
 
 
         Role role;
+        Gender gender;
         try {
             role = Role.valueOf(request.getRole());
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_DOESNT_EXIST));
+        }
+        try {
+            gender = Gender.valueOf(request.getGender());
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.Gender_DOESNT_EXIST));
         }
 
         // build user object and save it
@@ -66,7 +73,7 @@ public class AuthenticationService {
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
                     role,
-                    request.getGender(),
+                    gender,
                     request.getFirstName(),
                     request.getLastName(),
                     request.getBirthday(),
@@ -91,7 +98,7 @@ public class AuthenticationService {
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
                     role,
-                    request.getGender(),
+                    gender,
                     request.getFirstName(),
                     request.getLastName(),
                     request.getBirthday(),
@@ -106,7 +113,7 @@ public class AuthenticationService {
                     request.getUsername(),
                     passwordEncoder.encode(request.getPassword()),
                     role,
-                    request.getGender(),
+                    gender,
                     request.getFirstName(),
                     request.getLastName(),
                     request.getBirthday(),
@@ -114,6 +121,7 @@ public class AuthenticationService {
         }else {
             return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ROLE_IS_NULL));
         }
+        user.setCreationDate(new Date().getTime());
         user = userRepository.save(user);
 
         String generatedToken = jwtService.generateToken(user);
