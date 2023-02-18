@@ -25,5 +25,4 @@ public class Rating {
             inverseJoinColumns = @JoinColumn(name = "users_"))
     @JsonManagedReference
     private List<User> users = new ArrayList<>();
-
 }

@@ -166,7 +166,7 @@ public class JobController {
         try {
             client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (ClassCastException ignore){
-            return ResponseEntity.status(403).body(new ErrorResponse(false,ErrorMessages.NOT_AUTHORIZED));
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.NOT_AUTHORIZED));
         }
 
         JobDuration jobDuration = null;
@@ -219,10 +219,16 @@ public class JobController {
     }
     @PatchMapping("/{id}")
     public ResponseEntity<?> editJob(@PathVariable Long id, @RequestBody JobRequest request) {
-
+        Client client;
+        try {
+            client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }catch (ClassCastException ignore){
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.USER_MUST_BE_CLIENT));
+        }
         Job job = jobService.getJobWithId(id).orElse(null);
         if (job == null) return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.JOB_NOT_FOUND));
 
+        if (Objects.equals(job.getClient().getId(), client.getId())) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ONLY_THE_JOB_CREATOR_CAN_EDIT_THE_JOB));
         if (request.getTitle() != null && !request.getTitle().equals("")){
             job.setTitle(request.getTitle());
         }
@@ -279,11 +285,19 @@ public class JobController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable Long id) {
+        Client client;
+        try {
+            client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }catch (ClassCastException ignore){
+            return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.USER_MUST_BE_CLIENT));
+        }
+
         Job job = jobService.getJobWithId(id).orElse(null);
         if (job == null) {
             return ResponseEntity.badRequest().body(new ErrorResponse(false, ErrorMessages.JOB_NOT_FOUND));
         }
-        Client client = job.getClient();
+        if (Objects.equals(job.getClient().getId(), client.getId())) return ResponseEntity.badRequest().body(new ErrorResponse(false,ErrorMessages.ONLY_THE_JOB_CREATOR_CAN_DELETE_THE_JOB));
+
         client.getJobList().remove(job);
 
         jobRepository.delete(job);

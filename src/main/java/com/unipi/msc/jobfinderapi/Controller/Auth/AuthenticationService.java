@@ -92,7 +92,6 @@ public class AuthenticationService {
                             .alias(s.getAlias()).build());
                 }
                 request.setSkills(skillRepository.saveAll(skillList));
-                System.out.println(request.getSkills());
             }
             user = new Developer(request.getEmail(),
                     request.getUsername(),

@@ -11,7 +11,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-
     public Image uploadImage(MultipartFile file) throws IOException {
         return imageRepository.save(Image.builder()
                 .name(file.getName())

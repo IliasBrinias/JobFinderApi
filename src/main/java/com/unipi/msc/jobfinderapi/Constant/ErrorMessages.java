@@ -27,5 +27,15 @@ public class ErrorMessages {
     public static final String FILE_NOT_FOUND = "File not found";
     public static final String INVALID_FILE = "Invalid File";
     public static final String PROFILE_NOT_FOUND = "Profile not found";
+    public static final String USER_MUST_BE_CLIENT = "User must be client";
+    public static final String ONLY_THE_JOB_CREATOR_CAN_EDIT_THE_JOB = "Only the job creator can edit the job";
+    public static final String ONLY_THE_JOB_CREATOR_CAN_DELETE_THE_JOB = "Only the job creator can delete the job";
+    public static final String USER_MUST_BE_DEVELOPER = "User must be developer";
+    public static final String COMMENT_IS_OBLIGATORY = "Comment is obligatory";
+    public static final String PRICE_IS_OBLIGATORY = "Price is obligatory";
+    public static final String OFFER_NOT_FOUND = "Offer not found";
+    public static final String ONLY_THE_OFFER_CREATOR_CAN_CANCEL_THE_OFFER = "Only the offer creator can cancel the offer";
+    public static final String NOT_AUTHORIZED_TO_POST_A_COMMENT = "Not authorized to post a comment";
+    public static final String NOT_AUTHORIZED_TO_SEE_THE_COMMENTS = "Not authorized to see the comments";
     public static String Gender_DOESNT_EXIST = "Gender does not exist";
 }
